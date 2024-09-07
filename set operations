@@ -1,0 +1,115 @@
+1. Using mysql, create two tables KERALA and TAMILNADU, both with the columns NAME, LITERACY, POPULATION, and AREA. Fill both the tables with equal number of rows containing appropriate district details.
+
+-- Create table KERALA
+CREATE TABLE KERALA (
+    NAME VARCHAR(50),
+    LITERACY DECIMAL(5, 2),  -- Percentage of literacy
+    POPULATION INT,          -- Population count
+    AREA DECIMAL(10, 2)      -- Area in square kilometers
+);
+
+-- Create table TAMILNADU
+CREATE TABLE TAMILNADU (
+    NAME VARCHAR(50),
+    LITERACY DECIMAL(5, 2),  -- Percentage of literacy
+    POPULATION INT,          -- Population count
+    AREA DECIMAL(10, 2)      -- Area in square kilometers
+);
+
+-- Insert data into KERALA table
+INSERT INTO KERALA (NAME, LITERACY, POPULATION, AREA) VALUES
+('Thiruvananthapuram', 93.72, 3307284, 2186.00),
+('Kollam', 94.09, 2635375, 2491.00),
+('Alappuzha', 96.26, 2127789, 1414.00),
+('Ernakulam', 95.68, 3282388, 2407.00),
+('Thrissur', 95.32, 3121200, 3032.00);
+
+-- Insert data into TAMILNADU table
+INSERT INTO TAMILNADU (NAME, LITERACY, POPULATION, AREA) VALUES
+('Chennai', 90.18, 7090000, 426.00),
+('Coimbatore', 91.30, 3458045, 4723.00),
+('Madurai', 90.90, 3038242, 3709.00),
+('Tiruchirappalli', 91.37, 2713858, 4507.00),
+('Salem', 77.88, 3448395, 5245.00);
+
+Output:
+
++--------------------+----------+------------+---------+
+| NAME               | LITERACY | POPULATION | AREA    |
++--------------------+----------+------------+---------+
+| Thiruvananthapuram |    93.72 |    3307284 | 2186.00 |
+| Kollam             |    94.09 |    2635375 | 2491.00 |
+| Alappuzha          |    96.26 |    2127789 | 1414.00 |
+| Ernakulam          |    95.68 |    3282388 | 2407.00 |
+| Thrissur           |    95.32 |    3121200 | 3032.00 |
++--------------------+----------+------------+---------+
++-----------------+----------+------------+---------+
+| NAME            | LITERACY | POPULATION | AREA    |
++-----------------+----------+------------+---------+
+| Chennai         |    90.18 |    7090000 |  426.00 |
+| Coimbatore      |    91.30 |    3458045 | 4723.00 |
+| Madurai         |    90.90 |    3038242 | 3709.00 |
+| Tiruchirappalli |    91.37 |    2713858 | 4507.00 |
+| Salem           |    77.88 |    3448395 | 5245.00 |
++-----------------+----------+------------+---------+
+
+2. For the above tables, select common literacy from both the tables
+
+SELECT LITERACY
+FROM KERALA
+WHERE KERALA.LITERACY IN (
+SELECT LITERACY
+FROM TAMILNADU);
+
+Output:
+
++----------+
+| LITERACY |
++----------+
+|    93.72 |
+|    96.26 |
++----------+
+
+3. Display the names of all districts in both the tables
+
+SELECT NAME
+FROM KERALA
+UNION
+SELECT NAME
+FROM TAMILNADU;
+
+Output:
+
++--------------------+
+| NAME               |
++--------------------+
+| Thiruvananthapuram |
+| Kollam             |
+| Alappuzha          |
+| Ernakulam          |
+| Thrissur           |
+| Chennai            |
+| Coimbatore         |
+| Madurai            |
+| Tiruchirappalli    |
+| Salem              |
++--------------------+
+
+4. Use minus operation on literacy fields on both the tables.
+
+SELECT LITERACY
+FROM KERALA
+where KERALA.LITERACY
+not IN
+(SELECT LITERACY
+FROM TAMILNADU);
+
+Output:
+
++----------+
+| LITERACY |
++----------+
+|    94.09 |
+|    95.68 |
+|    95.32 |
++----------+

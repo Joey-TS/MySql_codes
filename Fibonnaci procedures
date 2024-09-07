@@ -1,0 +1,59 @@
+Using mysql, create a procedure to generate and display N number of terms of the fibbonacci series, given by user input
+
+DELIMITER //
+CREATE PROCEDURE fibonacci_series(N INT)
+BEGIN
+    DECLARE a INT DEFAULT 0;
+    DECLARE b INT DEFAULT 1;
+    DECLARE c INT;
+    DECLARE i INT DEFAULT 0;
+    CREATE TABLE FIBSERIES (NUM INT);
+
+    IF N < 1 THEN
+        SELECT "Invalid input";
+    END IF;
+    
+    IF N = 1 THEN
+        Insert INTO FIBSERIES VALUES(0);
+        SELECT * FROM FIBSERIES;
+    END IF;
+    
+    IF N = 2 THEN
+        Insert INTO FIBSERIES VALUES(0);
+        Insert INTO FIBSERIES VALUES(1);
+        SELECT * FROM FIBSERIES;
+    END IF;
+    
+    IF N > 2 THEN
+        Insert INTO FIBSERIES VALUES(0);
+        Insert INTO FIBSERIES VALUES(1);
+        WHILE i < N DO
+            SET c = a + b;
+            SET a = b;
+            SET b = c;
+            Insert INTO FIBSERIES VALUES(c);
+            SET i = i + 1;
+        END WHILE;
+        SELECT * FROM FIBSERIES;
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL fibonacci_series(7);
+
+Output:
+
++------+
+| NUM  |
++------+
+|    0 |
+|    1 |
+|    1 |
+|    2 |
+|    3 |
+|    5 |
+|    8 |
+|   13 |
+|   21 |
++------+

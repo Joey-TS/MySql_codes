@@ -1,0 +1,131 @@
+1. Create a students table via MySQL with the following columns : NAME, ROLL_NO, AGE, BRANCH. 
+    Insert at least 10 rows into the table.
+
+CREATE TABLE students (
+    NAME VARCHAR(100),
+    ROLL_NO INT PRIMARY KEY,
+    AGE INT,
+    BRANCH VARCHAR(50)
+);
+
+
+INSERT INTO students (NAME, ROLL_NO, AGE, BRANCH) VALUES
+('Alice', 101, 20, 'Computer Science'),
+('Bob', 102, 21, 'Mechanical Engineering'),
+('Charlie', 103, 22, 'Electrical Engineering'),
+('David', 104, 23, 'Civil Engineering'),
+('Eve', 105, 20, 'Information Technology'),
+('Frank', 106, 21, 'Computer Science'),
+('Grace', 107, 22, 'Mechanical Engineering'),
+('Hank', 108, 23, 'Civil Engineering'),
+('Ivy', 109, 20, 'Electrical Engineering'),
+('Jack', 110, 21, 'Information Technology');
+
+
+Output:
+
++---------+---------+------+------------------------+
+| NAME    | ROLL_NO | AGE  | BRANCH                 |
++---------+---------+------+------------------------+
+| Alice   |     101 |   20 | Computer Science       |
+| Bob     |     102 |   21 | Mechanical Engineering |
+| Charlie |     103 |   22 | Electrical Engineering |
+| David   |     104 |   23 | Civil Engineering      |
+| Eve     |     105 |   20 | Information Technology |
+| Frank   |     106 |   21 | Computer Science       |
+| Grace   |     107 |   22 | Mechanical Engineering |
+| Hank    |     108 |   23 | Civil Engineering      |
+| Ivy     |     109 |   20 | Electrical Engineering |
+| Jack    |     110 |   21 | Information Technology |
++---------+---------+------+------------------------+
+
+
+2. Alter the table's structure by adding a column (total_marks) and insert values into it
+
+ALTER TABLE students
+ADD COLUMN total_marks INT;
+
+UPDATE students SET total_marks = 450 WHERE ROLL_NO = 101;
+UPDATE students SET total_marks = 480 WHERE ROLL_NO = 102;
+UPDATE students SET total_marks = 500 WHERE ROLL_NO = 103;
+UPDATE students SET total_marks = 470 WHERE ROLL_NO = 104;
+UPDATE students SET total_marks = 460 WHERE ROLL_NO = 105;
+UPDATE students SET total_marks = 490 WHERE ROLL_NO = 106;
+UPDATE students SET total_marks = 475 WHERE ROLL_NO = 107;
+UPDATE students SET total_marks = 440 WHERE ROLL_NO = 108;
+UPDATE students SET total_marks = 495 WHERE ROLL_NO = 109;
+UPDATE students SET total_marks = 485 WHERE ROLL_NO = 110;
+
+Output:
+
++---------+---------+------+------------------------+-------------+
+| NAME    | ROLL_NO | AGE  | BRANCH                 | total_marks |
++---------+---------+------+------------------------+-------------+
+| Alice   |     101 |   20 | Computer Science       |         450 |
+| Bob     |     102 |   21 | Mechanical Engineering |         480 |
+| Charlie |     103 |   22 | Electrical Engineering |         500 |
+| David   |     104 |   23 | Civil Engineering      |         470 |
+| Eve     |     105 |   20 | Information Technology |         460 |
+| Frank   |     106 |   21 | Computer Science       |         490 |
+| Grace   |     107 |   22 | Mechanical Engineering |         475 |
+| Hank    |     108 |   23 | Civil Engineering      |         440 |
+| Ivy     |     109 |   20 | Electrical Engineering |         495 |
+| Jack    |     110 |   21 | Information Technology |         485 |
++---------+---------+------+------------------------+-------------+
+
+
+3. Display student info from the student table, renaming name as student name and roll no as student roll no.
+
+SELECT 
+    NAME AS 'Student Name', 
+    ROLL_NO AS 'Student Roll No', 
+    AGE, 
+    BRANCH, 
+    total_marks
+FROM students;
+
+Output:
+
++--------------+-----------------+------+------------------------+-------------+
+| Student Name | Student Roll No | AGE  | BRANCH                 | total_marks |
++--------------+-----------------+------+------------------------+-------------+
+| Alice        |             101 |   20 | Computer Science       |         450 |
+| Bob          |             102 |   21 | Mechanical Engineering |         480 |
+| Charlie      |             103 |   22 | Electrical Engineering |         500 |
+| David        |             104 |   23 | Civil Engineering      |         470 |
+| Eve          |             105 |   20 | Information Technology |         460 |
+| Frank        |             106 |   21 | Computer Science       |         490 |
+| Grace        |             107 |   22 | Mechanical Engineering |         475 |
+| Hank         |             108 |   23 | Civil Engineering      |         440 |
+| Ivy          |             109 |   20 | Electrical Engineering |         495 |
+| Jack         |             110 |   21 | Information Technology |         485 |
++--------------+-----------------+------+------------------------+-------------+
+
+
+4. Display the student information only in Computer science branch
+
+SELECT 
+    NAME AS 'Student Name', 
+    ROLL_NO AS 'Student Roll No', 
+    AGE, 
+    BRANCH, 
+    total_marks
+FROM students
+WHERE BRANCH = 'Computer Science';
+
+Output:
+
++--------------+-----------------+------+------------------+-------------+
+| Student Name | Student Roll No | AGE  | BRANCH           | total_marks |
++--------------+-----------------+------+------------------+-------------+
+| Alice        |             101 |   20 | Computer Science |         450 |
+| Frank        |             106 |   21 | Computer Science |         490 |
++--------------+-----------------+------+------------------+-------------+
+
+
+5. Display the highest, lowest and average of total marks
+SELECT 
+    MAX(total_marks) AS 'Highest Marks',
+    MIN(total_marks) AS 'Lowest Marks',
+    AVG(total_marks) AS 'Average Marks'
+FROM students;

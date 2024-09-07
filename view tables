@@ -1,0 +1,97 @@
+Using mysql create two tables ACCOUNT and TRANSACTION :
+
+ACCOUNT : ACC_NO PRIMARY KEY, ACC_NAME, ADDRESS, PAN_NO, ACC_TYPE, BALANCE, PHONE
+TRANSACTION: TRANS_ID PRIMARY KEY, ACC_NO FOREIGN KEY, TRANS_DATE, AMOUNT, TRANS_TYPE
+
+CREATE TABLE ACCOUNT (
+    ACC_NO INT PRIMARY KEY,
+    ACC_NAME VARCHAR(50),
+    ADDRESS VARCHAR(100),
+    PAN_NO VARCHAR(10),
+    ACC_TYPE VARCHAR(20),
+    BALANCE DECIMAL(15, 2),
+    PHONE VARCHAR(15)
+);
+
+CREATE TABLE TRANSACTION (
+    TRANS_ID INT PRIMARY KEY,
+    ACC_NO INT,
+    TRANS_DATE DATE,
+    AMOUNT DECIMAL(15, 2),
+    TRANS_TYPE VARCHAR(20),
+    FOREIGN KEY (ACC_NO) REFERENCES ACCOUNT(ACC_NO)
+);
+
+INSERT INTO ACCOUNT (ACC_NO, ACC_NAME, ADDRESS, PAN_NO, ACC_TYPE, BALANCE, PHONE)
+VALUES (1, 'John Doe', '123 Elm St', 'ABCDE1234F', 'CURRENT', 150000.00, '9876543210'),
+       (2, 'Jane Smith', '456 Oak St', 'ABCDE5678G', 'SAVINGS', 120000.00, '9123456789'),
+       (3, 'Alice Brown', '789 Pine St', 'ABCDE9012H', 'CURRENT', 90000.00, '9234567890'),
+       (4, 'Bob Johnson', '321 Maple St', 'ABCDE3456I', 'SAVINGS', 200000.00, '9345678901');
+
+INSERT INTO TRANSACTION (TRANS_ID, ACC_NO, TRANS_DATE, AMOUNT, TRANS_TYPE)
+VALUES (1, 1, '2024-09-05', 5000.00, 'DEBIT'),
+       (2, 1, '2024-08-20', 10000.00, 'CREDIT'),
+       (3, 2, '2024-07-15', 2000.00, 'DEBIT'),
+       (4, 3, '2024-08-05', 7000.00, 'CREDIT');
+
+SELECT * from ACCOUNT;
+
+SELECT * FROM TRANSACTION;
+
+Output:
+
++--------+-------------+--------------+------------+----------+-----------+------------+
+| ACC_NO | ACC_NAME    | ADDRESS      | PAN_NO     | ACC_TYPE | BALANCE   | PHONE      |
++--------+-------------+--------------+------------+----------+-----------+------------+
+|      1 | John Doe    | 123 Elm St   | ABCDE1234F | CURRENT  | 150000.00 | 9876543210 |
+|      2 | Jane Smith  | 456 Oak St   | ABCDE5678G | SAVINGS  | 120000.00 | 9123456789 |
+|      3 | Alice Brown | 789 Pine St  | ABCDE9012H | CURRENT  |  90000.00 | 9234567890 |
+|      4 | Bob Johnson | 321 Maple St | ABCDE3456I | SAVINGS  | 200000.00 | 9345678901 |
++--------+-------------+--------------+------------+----------+-----------+------------+
++----------+--------+------------+----------+------------+
+| TRANS_ID | ACC_NO | TRANS_DATE | AMOUNT   | TRANS_TYPE |
++----------+--------+------------+----------+------------+
+|        1 |      1 | 2024-09-05 |  5000.00 | DEBIT      |
+|        2 |      1 | 2024-08-20 | 10000.00 | CREDIT     |
+|        3 |      2 | 2024-07-15 |  2000.00 | DEBIT      |
+|        4 |      3 | 2024-08-05 |  7000.00 | CREDIT     |
++----------+--------+------------+----------+------------+
+
+
+
+Create views to:
+1. To list ACC_NAME , ACC_NO PAN_NO of account holders where account typre is "CURRENT"
+
+CREATE VIEW CURRENT_ACCOUNTS AS
+SELECT ACC_NAME, ACC_NO, PAN_NO
+FROM ACCOUNT
+WHERE ACC_TYPE = 'CURRENT';
+
+SELECT * FROM CURRENT_ACCOUNTS;
+
+Output:
++-------------+--------+------------+
+| ACC_NAME    | ACC_NO | PAN_NO     |
++-------------+--------+------------+
+| John Doe    |      1 | ABCDE1234F |
+| Alice Brown |      3 | ABCDE9012H |
++-------------+--------+------------+
+
+
+2. List ACC_NAME, PHONE, BALANCE of account holders who have no transactions in the current month and balance greater than one lakhs.
+
+CREATE VIEW HIGH_BALANCE_NO_TRANSACTIONS AS
+SELECT A.ACC_NAME, A.PHONE, A.BALANCE
+FROM ACCOUNT A
+LEFT JOIN TRANSACTION T ON A.ACC_NO = T.ACC_NO 
+  AND MONTH(T.TRANS_DATE) = MONTH(CURDATE())
+WHERE T.TRANS_ID IS NULL AND A.BALANCE > 100000.00;
+
+SELECT * FROM HIGH_BALANCE_NO_TRANSACTIONS;
+
++-------------+------------+-----------+
+| ACC_NAME    | PHONE      | BALANCE   |
++-------------+------------+-----------+
+| Jane Smith  | 9123456789 | 120000.00 |
+| Bob Johnson | 9345678901 | 200000.00 |
++-------------+------------+-----------+
